@@ -7,21 +7,11 @@ using Xamarin.Forms;
 
 namespace Rg.Forms.ThreadView
 {
-    public class Rg.Forms.ThreadView : ContentPage
+    public class ThreadView : ContentPage
 	{
-		public Rg.Forms.ThreadView ()
+		public ThreadView ()
 		{
-			var button = new Button
-            {
-                Text = "Click Me!",
-                VerticalOptions = LayoutOptions.CenterAndExpand,
-                HorizontalOptions = LayoutOptions.CenterAndExpand,
-            };
-
-    int clicked = 0;
-    button.Clicked += (s, e) => button.Text = "Clicked: " + clicked++;
-
-			Content = button;
+			
 		}
 	}
 }
