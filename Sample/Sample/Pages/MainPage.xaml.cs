@@ -14,5 +14,15 @@ namespace Sample.Pages
         {
             InitializeComponent();
         }
+
+        private async void OpenThreadView(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new ThreadPage());
+        }
+
+        private async void OpenStandartView(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new StandartPage());
+        }
     }
 }
