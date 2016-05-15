@@ -127,6 +127,10 @@
     <None Include="Properties\AndroidManifest.xml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Rg.Forms.ThreadView.Droid\Rg.Forms.ThreadView.Droid.csproj">
+      <Project>{04327644-c315-4f40-ab55-b7db394a46ec}</Project>
+      <Name>Rg.Forms.ThreadView.Droid</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Sample\Sample.csproj">
       <Name>Sample</Name>
     </ProjectReference>
