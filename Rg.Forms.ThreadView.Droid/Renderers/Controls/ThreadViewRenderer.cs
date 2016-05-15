@@ -36,7 +36,10 @@ namespace Rg.Forms.ThreadView.Droid.Renderers.Controls
             if (e.NewElement != null)
             {
                 Element.ContentChanged += OnContentChanged;
-                CreateRenderer(Element);
+                if (Element.Content != null)
+                {
+                    CreateRenderer(Element);
+                }
             }
             if (e.OldElement != null)
             {
@@ -52,9 +55,10 @@ namespace Rg.Forms.ThreadView.Droid.Renderers.Controls
 
         private void CreateRenderer(Views.Controls.ThreadView element)
         {
-            var content = element.Content;
             Task.Run(() =>
             {
+                var content = element.Content;
+
                 var renderer = Platform.GetRenderer(element.Content);
                 if (renderer == null && content == element.Content)
                 {
@@ -66,15 +70,17 @@ namespace Rg.Forms.ThreadView.Droid.Renderers.Controls
                 {
                     Device.BeginInvokeOnMainThread(SetContent);
                 }
-                content = null;
             });
         }
 
         private void SetContent()
         {
             if (Element == null) return;
+
             ChangePackager();
             ContentHelper.OnContentChanged(Element, null, Element.Content);
+
+            Element.Animate();
         }
 
         private void ChangePackager()
