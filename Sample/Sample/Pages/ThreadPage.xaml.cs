@@ -14,23 +14,13 @@ namespace Sample.Pages
         {
             InitializeComponent();
 
-            var scroll = new ScrollView();
-
-            var threadView = new ThreadView();
-
-            var stack = new StackLayout();
-
             for (int i = 0; i < 600; i++)
             {
-                stack.Children.Add(new Label
+                ThreadViewStack.Children.Add(new Label
                 {
                     Text = "Label " + i
                 });
             }
-
-            threadView.Content = stack;
-            scroll.Content = threadView;
-            Content = scroll;
         }
     }
 }

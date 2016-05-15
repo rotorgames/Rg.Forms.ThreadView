@@ -6,5 +6,6 @@
   <StackLayout>
     <Button Text="Standart Views" Clicked="OpenStandartView"/>
     <Button Text="Thread Views" Clicked="OpenThreadView"/>
+    <Button Text="Multiply Thread Views" Clicked="OpenMultiplyThreadView"></Button>
   </StackLayout>
 </ContentPage>

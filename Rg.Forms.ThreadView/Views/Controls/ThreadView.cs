@@ -11,12 +11,19 @@ namespace Rg.Forms.ThreadView.Views.Controls
     [ContentProperty(nameof(Content))]
     public class ThreadView : TemplatedView
     {
-        public static readonly BindableProperty ContentProperty = BindableProperty.Create(nameof(Content), typeof(View), typeof(ContentView), null, propertyChanged: OnContentChange);
+        internal event EventHandler ContentChanged;
+
+        public static readonly BindableProperty ContentProperty = BindableProperty.Create(nameof(Content), typeof(View), typeof(ThreadView), null, propertyChanged: OnContentChange);
 
         public View Content
         {
             get { return (View)GetValue(ContentProperty); }
             set { SetValue(ContentProperty, value); }
+        }
+
+        public ThreadView()
+        {
+            
         }
 
         protected override void OnBindingContextChanged()
@@ -33,7 +40,16 @@ namespace Rg.Forms.ThreadView.Views.Controls
 
         private static void OnContentChange(BindableObject bindable, object oldvalue, object newvalue)
         {
-            ContentHelper.OnContentChanged(bindable, oldvalue, newvalue);
+            var element = (ThreadView) bindable;
+
+            if (Device.OS != TargetPlatform.Android || !element.IsEnabled)
+            {
+                ContentHelper.OnContentChanged(bindable, oldvalue, newvalue);
+            }
+            else
+            {
+                element.ContentChanged?.Invoke(element, EventArgs.Empty);
+            }
         }
     }
 }

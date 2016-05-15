@@ -1,6 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:Rg.Forms.ThreadView.Views.Controls;assembly=Rg.Forms.ThreadView"
              x:Class="Sample.Pages.ThreadPage"
              Title="Thread">
+  <ScrollView>
+    <StackLayout>
+      <ActivityIndicator IsRunning="True"/>
+      <controls:ThreadView>
+        <StackLayout x:Name="ThreadViewStack"></StackLayout>
+      </controls:ThreadView>
+    </StackLayout>
+  </ScrollView>
 </ContentPage>

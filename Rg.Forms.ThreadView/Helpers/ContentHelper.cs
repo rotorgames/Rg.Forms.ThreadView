@@ -8,7 +8,7 @@ using Xamarin.Forms;
 
 namespace Rg.Forms.ThreadView.Helpers
 {
-    public static class ContentHelper
+    internal static class ContentHelper
     {
         public static void OnContentChanged(BindableObject bindable, object oldValue, object newValue)
         {

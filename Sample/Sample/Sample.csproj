@@ -36,6 +36,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="App.cs" />
+    <Compile Include="Pages\MultiplyThreadPage.xaml.cs">
+      <DependentUpon>MultiplyThreadPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\StandartPage.xaml.cs">
       <DependentUpon>StandartPage.xaml</DependentUpon>
     </Compile>
@@ -85,6 +88,12 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Pages\ThreadPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Pages\MultiplyThreadPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>
