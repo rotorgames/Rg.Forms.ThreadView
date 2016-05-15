@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
+using Sample.Pages;
 using Xamarin.Forms;
 
 namespace Sample
@@ -13,21 +13,7 @@ namespace Sample
         {
             // The root page of your application
 
-            var mainPage = new ContentPage();
-
-            var stack = new StackLayout();
-
-            for (var i = 0; i < 100; i++)
-            {
-                stack.Children.Add(new Label()
-                {
-                    Text = "Test "+1
-                });
-            }
-
-            mainPage.Content = stack;
-
-            MainPage = mainPage;
+            MainPage = new NavigationPage(new MainPage());
         }
 
         protected override void OnStart()
