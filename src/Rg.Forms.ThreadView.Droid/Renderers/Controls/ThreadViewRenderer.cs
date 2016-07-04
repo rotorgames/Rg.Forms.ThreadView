@@ -59,17 +59,12 @@ namespace Rg.Forms.ThreadView.Droid.Renderers.Controls
             {
                 var content = element.Content;
 
-                //TODO: Возможно не стоит устанавливать parent, может стоит убрать вообще создание рендера и делать все в OnContentChanged (Если все работает, то не надо)
-                content.Parent = element;
-
                 var renderer = Platform.GetRenderer(element.Content);
                 if (renderer == null)
                 {
                     renderer = Platform.CreateRenderer(element.Content);
                     Platform.SetRenderer(element.Content, renderer);
                 }
-
-                content.Parent = null;
 
                 if (Element != null && content == element.Content)
                 {
