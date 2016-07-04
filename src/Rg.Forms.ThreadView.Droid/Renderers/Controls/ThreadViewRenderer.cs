@@ -98,7 +98,7 @@ namespace Rg.Forms.ThreadView.Droid.Renderers.Controls
         {
             var packager = PackagerHelper.GetPackager<Views.Controls.ThreadView, VisualElementPackager>(this);
 
-            packager.Dispose();
+            packager?.Dispose();
 
             var newPackager = new ThreadViewPackager(this);
             SetPackager(newPackager);
