@@ -38,15 +38,12 @@ namespace Rg.Forms.ThreadView.Droid.Packagers
 
         public ThreadViewPackager(IVisualElementRenderer renderer) : base(renderer)
         {
-            _renderer = renderer;
-
             var handler = typeof(VisualElementPackager).GetField("_childAddedHandler", BindingFlags.NonPublic | BindingFlags.Instance);
             handler?.SetValue(this, (EventHandler<ElementEventArgs>) OnChildAdded);
         }
 
         public void Destroy()
         {
-            _renderer = null;
             ChildViews = null;
         }
 
@@ -77,7 +74,7 @@ namespace Rg.Forms.ThreadView.Droid.Packagers
                 if (ChildViews == null)
                     ChildViews = new List<IVisualElementRenderer>();
 
-                _renderer.ViewGroup.AddView(oldRenderer.ViewGroup);
+                //_renderer.ViewGroup.AddView(oldRenderer.ViewGroup);
                 ChildViews.Add(oldRenderer);
             }
             else

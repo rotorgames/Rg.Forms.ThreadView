@@ -8,12 +8,14 @@ using Xamarin.Forms;
 
 namespace Rg.Forms.ThreadView.Views.Controls
 {
-    [ContentProperty(nameof(ThreadView.Content))]
+    [ContentProperty(nameof(Content))]
     public class ThreadView : TemplatedView
     {
         internal event EventHandler ContentChanged;
 
         public static readonly BindableProperty ContentProperty = BindableProperty.Create(nameof(Content), typeof(View), typeof(ThreadView), null, propertyChanged: OnContentChange);
+
+        public static readonly BindableProperty IsCreatedProperty = BindableProperty.Create(nameof(IsCreated), typeof(bool), typeof(ThreadView), false, BindingMode.OneWayToSource);
 
         public static readonly BindableProperty IsAnimatedProperty = BindableProperty.Create(nameof(IsAnimated), typeof(bool), typeof(ThreadView), true);
 
@@ -21,10 +23,18 @@ namespace Rg.Forms.ThreadView.Views.Controls
 
         public static readonly BindableProperty TimeOffsetProperty = BindableProperty.Create(nameof(TimeOffset), typeof(uint), typeof(ThreadView), 120u);
 
+        public static readonly BindableProperty InvokeOnMainThreadProperty = BindableProperty.Create(nameof(InvokeOnMainThread), typeof(bool), typeof(ThreadView), false);
+
         public View Content
         {
             get { return (View) GetValue(ContentProperty); }
             set { SetValue(ContentProperty, value); }
+        }
+
+        public View IsCreated
+        {
+            get { return (View)GetValue(IsCreatedProperty); }
+            private set { SetValue(IsCreatedProperty, value); }
         }
 
         public bool IsAnimated
@@ -43,6 +53,12 @@ namespace Rg.Forms.ThreadView.Views.Controls
         {
             get { return (uint) GetValue(TimeOffsetProperty); }
             set { SetValue(TimeOffsetProperty, value); }
+        }
+
+        public bool InvokeOnMainThread
+        {
+            get { return (bool)GetValue(InvokeOnMainThreadProperty); }
+            set { SetValue(InvokeOnMainThreadProperty, value); }
         }
 
         protected override void OnBindingContextChanged()

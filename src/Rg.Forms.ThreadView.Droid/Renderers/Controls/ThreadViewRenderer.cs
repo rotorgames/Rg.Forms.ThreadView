@@ -55,30 +55,41 @@ namespace Rg.Forms.ThreadView.Droid.Renderers.Controls
 
         private void CreateRenderer(Views.Controls.ThreadView element)
         {
-            Task.Run(() =>
+            StartTaskIfNeed(() =>
             {
                 var content = element.Content;
 
+                //TODO: Возможно не стоит устанавливать parent, может стоит убрать вообще создание рендера и делать все в OnContentChanged (Если все работает, то не надо)
+                content.Parent = element;
+
                 var renderer = Platform.GetRenderer(element.Content);
-                if (renderer == null && content == element.Content)
+                if (renderer == null)
                 {
                     renderer = Platform.CreateRenderer(element.Content);
                     Platform.SetRenderer(element.Content, renderer);
                 }
 
-                if (content == element.Content)
+                content.Parent = null;
+
+                if (Element != null && content == element.Content)
                 {
-                    Device.BeginInvokeOnMainThread(SetContent);
+                    ChangePackager();
+                    ContentHelper.OnContentChanged(Element, null, Element.Content);
+
+                    BeginInvokeOnMainThreadIfNeed(async () =>
+                    {
+                        if (element.IsTimeOffset) await Task.Delay((int)element.TimeOffset);
+                        SetContent(renderer);
+                    });
                 }
             });
         }
 
-        private void SetContent()
+        private void SetContent(IVisualElementRenderer renderer)
         {
             if (Element == null) return;
 
-            ChangePackager();
-            ContentHelper.OnContentChanged(Element, null, Element.Content);
+            ViewGroup.AddView(renderer.ViewGroup);
 
             Element.Animate();
         }
@@ -91,6 +102,30 @@ namespace Rg.Forms.ThreadView.Droid.Renderers.Controls
 
             var newPackager = new ThreadViewPackager(this);
             SetPackager(newPackager);
+        }
+
+        private async void StartTaskIfNeed(Action action)
+        {
+            if (Element.InvokeOnMainThread)
+            {
+                Device.BeginInvokeOnMainThread(action);
+            }
+            else
+            {
+                await Task.Run(action);
+            }
+        }
+
+        private void BeginInvokeOnMainThreadIfNeed(Action action)
+        {
+            if (Element.InvokeOnMainThread)
+            {
+                action.Invoke();
+            }
+            else
+            {
+                Device.BeginInvokeOnMainThread(action);
+            }
         }
     }
 }
