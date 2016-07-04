@@ -74,7 +74,6 @@ namespace Rg.Forms.ThreadView.Droid.Renderers.Controls
                 if (Element != null && content == element.Content)
                 {
                     ChangePackager();
-                    ContentHelper.OnContentChanged(Element, null, Element.Content);
 
                     BeginInvokeOnMainThreadIfNeed(async () =>
                     {
@@ -88,6 +87,8 @@ namespace Rg.Forms.ThreadView.Droid.Renderers.Controls
         private void SetContent(IVisualElementRenderer renderer)
         {
             if (Element == null) return;
+
+            ContentHelper.OnContentChanged(Element, null, Element.Content);
 
             ViewGroup.AddView(renderer.ViewGroup);
 
