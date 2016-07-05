@@ -31,9 +31,9 @@ namespace Rg.Forms.ThreadView.Views.Controls
             set { SetValue(ContentProperty, value); }
         }
 
-        public View IsCreated
+        public bool IsCreated
         {
-            get { return (View)GetValue(IsCreatedProperty); }
+            get { return (bool)GetValue(IsCreatedProperty); }
             private set { SetValue(IsCreatedProperty, value); }
         }
 
