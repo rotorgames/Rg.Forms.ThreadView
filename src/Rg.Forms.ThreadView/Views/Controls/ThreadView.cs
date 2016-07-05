@@ -11,7 +11,11 @@ namespace Rg.Forms.ThreadView.Views.Controls
     [ContentProperty(nameof(Content))]
     public class ThreadView : TemplatedView
     {
+        //TODO: Попробывать найти решение, в котором Entry и Image будут работать без InvokeOnMainThread
+
         internal event EventHandler ContentChanged;
+
+        public static readonly BindableProperty IsThreadEnabledProperty = BindableProperty.Create(nameof(IsThreadEnabled), typeof(bool), typeof(ThreadView), true);
 
         public static readonly BindableProperty ContentProperty = BindableProperty.Create(nameof(Content), typeof(View), typeof(ThreadView), null, propertyChanged: OnContentChange);
 
@@ -24,6 +28,12 @@ namespace Rg.Forms.ThreadView.Views.Controls
         public static readonly BindableProperty TimeOffsetProperty = BindableProperty.Create(nameof(TimeOffset), typeof(uint), typeof(ThreadView), 120u);
 
         public static readonly BindableProperty InvokeOnMainThreadProperty = BindableProperty.Create(nameof(InvokeOnMainThread), typeof(bool), typeof(ThreadView), false);
+
+        public bool IsThreadEnabled
+        {
+            get { return (bool)GetValue(IsThreadEnabledProperty); }
+            set { SetValue(IsThreadEnabledProperty, value); }
+        }
 
         public View Content
         {
@@ -79,7 +89,7 @@ namespace Rg.Forms.ThreadView.Views.Controls
 
             if (element.IsAnimated) element.PreparingAnimation();
 
-            if (Device.OS != TargetPlatform.Android || !element.IsEnabled)
+            if (Device.OS != TargetPlatform.Android || !element.IsThreadEnabled)
             {
                 ContentHelper.OnContentChanged(bindable, oldvalue, newvalue);
                 if (element.IsAnimated) element.Animate();
