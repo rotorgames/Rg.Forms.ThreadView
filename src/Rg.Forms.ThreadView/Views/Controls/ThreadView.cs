@@ -25,7 +25,7 @@ namespace Rg.Forms.ThreadView.Views.Controls
 
         public static readonly BindableProperty IsTimeOffsetProperty = BindableProperty.Create(nameof(IsTimeOffset), typeof(bool), typeof(ThreadView), true);
 
-        public static readonly BindableProperty TimeOffsetProperty = BindableProperty.Create(nameof(TimeOffset), typeof(uint), typeof(ThreadView), 120u);
+        public static readonly BindableProperty TimeOffsetProperty = BindableProperty.Create(nameof(TimeOffset), typeof(int), typeof(ThreadView), 120);
 
         public static readonly BindableProperty InvokeOnMainThreadProperty = BindableProperty.Create(nameof(InvokeOnMainThread), typeof(bool), typeof(ThreadView), false);
 
@@ -59,9 +59,9 @@ namespace Rg.Forms.ThreadView.Views.Controls
             set { SetValue(IsTimeOffsetProperty, value); }
         }
 
-        public uint TimeOffset
+        public int TimeOffset
         {
-            get { return (uint) GetValue(TimeOffsetProperty); }
+            get { return (int) GetValue(TimeOffsetProperty); }
             set { SetValue(TimeOffsetProperty, value); }
         }
 
