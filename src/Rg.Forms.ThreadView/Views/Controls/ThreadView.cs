@@ -11,7 +11,8 @@ namespace Rg.Forms.ThreadView.Views.Controls
     [ContentProperty(nameof(Content))]
     public class ThreadView : TemplatedView
     {
-        //TODO: Попробывать найти решение, в котором Entry и Image будут работать без InvokeOnMainThread
+        //TODO: Попробовать найти решение, в котором Entry и Image будут работать без InvokeOnMainThread
+        //TODO: Возможно проблема с вылетами (Entry и Image) связанна с быстрой установкой BindingContext, возможно стоит подождать, пока создадутся все рендеры, а потом применять контекст
 
         internal event EventHandler ContentChanged;
 
