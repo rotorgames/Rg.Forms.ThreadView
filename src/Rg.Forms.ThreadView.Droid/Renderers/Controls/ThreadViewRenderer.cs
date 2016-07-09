@@ -10,11 +10,12 @@ using Rg.Forms.ThreadView.Helpers;
 using Rg.Forms.ThreadView.Views.Controls;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
+using View = Android.Views.View;
 
 [assembly: ExportRenderer(typeof(ThreadView), typeof(ThreadViewRenderer))]
 namespace Rg.Forms.ThreadView.Droid.Renderers.Controls
 {
-    public class ThreadViewRenderer : VisualElementRenderer<Views.Controls.ThreadView>
+    public class ThreadViewRenderer : ViewRenderer<Views.Controls.ThreadView, View>
     {
         protected override void Dispose(bool disposing)
         {
@@ -70,18 +71,21 @@ namespace Rg.Forms.ThreadView.Droid.Renderers.Controls
 
                 content.Parent = null;
 
-                ChangePackager();
-
-                BeginInvokeOnMainThreadIfNeed(async () =>
+                if (Element != null && content == element.Content)
                 {
-                    if (element.IsTimeOffset) await Task.Delay((int)element.TimeOffset);
+                    ChangePackagerIfNeed();
+                    ContentHelper.OnContentChanged(Element, null, content);
 
-                    if (Element != null && content == element.Content)
+                    BeginInvokeOnMainThreadIfNeed(async () =>
                     {
-                        ContentHelper.OnContentChanged(Element, null, Element.Content);
-                        SetContent(renderer);
-                    }
-                });
+                        if (element.IsTimeOffset) await Task.Delay(element.TimeOffset);
+
+                        if (Element != null)
+                        {
+                            SetContent(renderer);
+                        }
+                    });
+                }
             });
         }
 
@@ -89,19 +93,24 @@ namespace Rg.Forms.ThreadView.Droid.Renderers.Controls
         {
             if (Element == null) return;
 
-            ViewGroup.AddView(renderer.ViewGroup);
+            Element.IsCreated = true;
+            if (Element.InternalBindingContext != null) Element.BindingContext = Element.InternalBindingContext;
+            SetNativeControl(renderer.ViewGroup);
 
             Element.Animate();
         }
 
-        private void ChangePackager()
+        private void ChangePackagerIfNeed()
         {
             var packager = PackagerHelper.GetPackager<Views.Controls.ThreadView, VisualElementPackager>(this);
 
-            packager?.Dispose();
+            if(!(packager is ThreadViewPackager))
+            {
+                packager?.Dispose();
 
-            var newPackager = new ThreadViewPackager(this);
-            SetPackager(newPackager);
+                var newPackager = new ThreadViewPackager(this);
+                SetPackager(newPackager);
+            }
         }
 
         private async void StartTaskIfNeed(Action action)

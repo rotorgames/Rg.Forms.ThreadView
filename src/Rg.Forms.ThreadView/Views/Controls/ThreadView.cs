@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Rg.Forms.ThreadView.Context;
 using Rg.Forms.ThreadView.Helpers;
 using Xamarin.Forms;
 
@@ -15,6 +16,7 @@ namespace Rg.Forms.ThreadView.Views.Controls
         //TODO: Возможно проблема с вылетами (Entry и Image) связанна с быстрой установкой BindingContext, возможно стоит подождать, пока создадутся все рендеры, а потом применять контекст
 
         internal event EventHandler ContentChanged;
+        internal object InternalBindingContext;
 
         public static readonly BindableProperty IsThreadEnabledProperty = BindableProperty.Create(nameof(IsThreadEnabled), typeof(bool), typeof(ThreadView), true);
 
@@ -45,7 +47,7 @@ namespace Rg.Forms.ThreadView.Views.Controls
         public bool IsCreated
         {
             get { return (bool)GetValue(IsCreatedProperty); }
-            private set { SetValue(IsCreatedProperty, value); }
+            internal set { SetValue(IsCreatedProperty, value); }
         }
 
         public bool IsAnimated
@@ -72,15 +74,27 @@ namespace Rg.Forms.ThreadView.Views.Controls
             set { SetValue(InvokeOnMainThreadProperty, value); }
         }
 
+        public ThreadView()
+        {
+            if (Device.OS != TargetPlatform.Android)
+            {
+                IsCreated = true;
+            }
+        }
+
         protected override void OnBindingContextChanged()
         {
             base.OnBindingContextChanged();
 
             View content = Content;
-            ControlTemplate controlTemplate = ControlTemplate;
-            if (content != null && controlTemplate != null)
+            if (content != null && IsCreated)
             {
                 SetInheritedBindingContext(content, BindingContext);
+            }
+            if (!(BindingContext is DefaultBindingContext) && !IsCreated)
+            {
+                InternalBindingContext = BindingContext;
+                BindingContext = new DefaultBindingContext();
             }
         }
 
@@ -97,6 +111,7 @@ namespace Rg.Forms.ThreadView.Views.Controls
             }
             else
             {
+                element.IsCreated = false;
                 element.ContentChanged?.Invoke(element, EventArgs.Empty);
             }
         }
