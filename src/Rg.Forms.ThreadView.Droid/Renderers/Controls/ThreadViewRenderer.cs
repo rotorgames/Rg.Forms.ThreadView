@@ -59,6 +59,8 @@ namespace Rg.Forms.ThreadView.Droid.Renderers.Controls
             {
                 var content = element.Content;
 
+                content.Parent = Element;
+
                 var renderer = Platform.GetRenderer(element.Content);
                 if (renderer == null)
                 {
@@ -66,17 +68,20 @@ namespace Rg.Forms.ThreadView.Droid.Renderers.Controls
                     Platform.SetRenderer(element.Content, renderer);
                 }
 
-                if (Element != null && content == element.Content)
-                {
-                    ChangePackager();
-                    ContentHelper.OnContentChanged(Element, null, Element.Content);
+                content.Parent = null;
 
-                    BeginInvokeOnMainThreadIfNeed(async () =>
+                ChangePackager();
+
+                BeginInvokeOnMainThreadIfNeed(async () =>
+                {
+                    if (element.IsTimeOffset) await Task.Delay((int)element.TimeOffset);
+
+                    if (Element != null && content == element.Content)
                     {
-                        if (element.IsTimeOffset) await Task.Delay((int)element.TimeOffset);
+                        ContentHelper.OnContentChanged(Element, null, Element.Content);
                         SetContent(renderer);
-                    });
-                }
+                    }
+                });
             });
         }
 
@@ -101,6 +106,8 @@ namespace Rg.Forms.ThreadView.Droid.Renderers.Controls
 
         private async void StartTaskIfNeed(Action action)
         {
+            if (Element == null) return;
+
             if (Element.InvokeOnMainThread)
             {
                 Device.BeginInvokeOnMainThread(action);
@@ -113,6 +120,8 @@ namespace Rg.Forms.ThreadView.Droid.Renderers.Controls
 
         private void BeginInvokeOnMainThreadIfNeed(Action action)
         {
+            if(Element == null) return;
+
             if (Element.InvokeOnMainThread)
             {
                 action.Invoke();
