@@ -12,6 +12,7 @@ namespace Rg.Forms.ThreadView.Views.Controls
     [ContentProperty(nameof(Content))]
     public class ThreadView : TemplatedView
     {
+        //TODO: Изменить OnBindingContextChanged, оставив в нем только base.OnBindingContextChanged(); так как если не вызывать base метод, то контекст никогда не измениться, все остальное не нужно
         //TODO: Попробовать найти решение, в котором Entry и Image будут работать без InvokeOnMainThread
         //TODO: Возможно проблема с вылетами (Entry и Image) связанна с быстрой установкой BindingContext, возможно стоит подождать, пока создадутся все рендеры, а потом применять контекст
         //TODO: Возможно не стоит менять биндинг контекст, вызывать анимации и делать SetControl, так как OnContentChanged и так это делает если не менять Packager
