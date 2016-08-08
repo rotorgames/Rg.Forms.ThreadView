@@ -85,14 +85,16 @@ namespace Rg.Forms.ThreadView.Views.Controls
 
         protected override void OnBindingContextChanged()
         {
-            base.OnBindingContextChanged();
-
             View content = Content;
-            if (content != null && IsCreated)
+            if (content == null)
+            {
+                base.OnBindingContextChanged();
+            }
+            else if (IsCreated)
             {
                 SetInheritedBindingContext(content, BindingContext);
             }
-            if (!(BindingContext is DefaultBindingContext) && !IsCreated)
+            else if (!(BindingContext is DefaultBindingContext) && !IsCreated)
             {
                 InternalBindingContext = BindingContext;
                 BindingContext = new DefaultBindingContext();
