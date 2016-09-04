@@ -56,8 +56,10 @@ namespace Rg.Forms.ThreadView.Droid.Renderers.Controls
 
         private void CreateRenderer(Views.Controls.ThreadView element)
         {
-            StartTaskIfNeed(() =>
+            StartTaskIfNeed(async () =>
             {
+                if (element.IsTimeOffset && element.InvokeOnMainThread) await Task.Delay(element.TimeOffset);
+
                 var content = element.Content;
 
                 content.Parent = Element;
@@ -78,7 +80,7 @@ namespace Rg.Forms.ThreadView.Droid.Renderers.Controls
 
                     BeginInvokeOnMainThreadIfNeed(async () =>
                     {
-                        if (element.IsTimeOffset) await Task.Delay(element.TimeOffset);
+                        if (element.IsTimeOffset && !element.InvokeOnMainThread) await Task.Delay(element.TimeOffset);
 
                         if (Element != null)
                         {

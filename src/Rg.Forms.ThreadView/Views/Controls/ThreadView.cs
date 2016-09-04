@@ -95,7 +95,7 @@ namespace Rg.Forms.ThreadView.Views.Controls
             {
                 SetInheritedBindingContext(content, BindingContext);
             }
-            else if (!(BindingContext is DefaultBindingContext) && !IsCreated)
+            else if (!(BindingContext is DefaultBindingContext) && !IsCreated && BindingContext != null)
             {
                 InternalBindingContext = BindingContext;
                 BindingContext = new DefaultBindingContext();
@@ -127,7 +127,7 @@ namespace Rg.Forms.ThreadView.Views.Controls
 
         internal async void Animate()
         {
-            await Task.Delay((int) TimeOffset);
+            await Task.Delay(300);
             await this.FadeTo(1);
         }
     }
