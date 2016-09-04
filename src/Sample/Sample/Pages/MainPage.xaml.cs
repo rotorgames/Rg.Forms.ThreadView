@@ -29,5 +29,10 @@ namespace Sample.Pages
         {
             await Navigation.PushAsync(new MultiplyThreadPage());
         }
+
+        private async void OpenMainThreadView(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new MainThreadPage());
+        }
     }
 }

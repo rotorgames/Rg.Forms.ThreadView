@@ -7,7 +7,7 @@
   <ScrollView>
     <StackLayout>
       <ActivityIndicator IsRunning="True"/>
-      <controls:ThreadView>
+      <controls:ThreadView InvokeOnMainThread="True" TimeOffset="5000">
         <StackLayout x:Name="ThreadViewStack"></StackLayout>
       </controls:ThreadView>
     </StackLayout>

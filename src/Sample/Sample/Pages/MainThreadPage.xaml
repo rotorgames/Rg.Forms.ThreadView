@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:Sample.ViewModels;assembly=Sample"
+             xmlns:controls="clr-namespace:Rg.Forms.ThreadView.Views.Controls;assembly=Rg.Forms.ThreadView"
+             x:Class="Sample.Pages.MainThreadPage">
+  <ContentPage.BindingContext>
+    <viewModels:MainThreadViewModel/>
+  </ContentPage.BindingContext>
+  <controls:ThreadView>
+    <StackLayout>
+      <Label Text="{Binding ThreadText}"/>
+      <controls:ThreadView InvokeOnMainThread="True">
+        <Label Text="{Binding MainThreadText}"/>
+      </controls:ThreadView>
+    </StackLayout>
+  </controls:ThreadView>
+</ContentPage>
