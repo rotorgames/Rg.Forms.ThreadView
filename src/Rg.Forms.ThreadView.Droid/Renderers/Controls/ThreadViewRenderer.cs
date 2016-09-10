@@ -95,8 +95,8 @@ namespace Rg.Forms.ThreadView.Droid.Renderers.Controls
         {
             if (Element == null) return;
 
-            Element.OnCreated();
             SetNativeControl(renderer.ViewGroup);
+            Element.OnCreated();
 
             Element.Animate();
         }

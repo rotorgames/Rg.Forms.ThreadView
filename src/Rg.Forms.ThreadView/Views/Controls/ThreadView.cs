@@ -137,7 +137,7 @@ namespace Rg.Forms.ThreadView.Views.Controls
         {
             _privateIsCreated = true;
             if (InternalBindingContext != null) BindingContext = InternalBindingContext;
-            await Task.Delay(50);
+            await Task.Delay(100);
 
             IsCreated = true;
             CreatedCommand?.Execute(null);
