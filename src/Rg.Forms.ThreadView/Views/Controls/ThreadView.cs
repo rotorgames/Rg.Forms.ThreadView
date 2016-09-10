@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Rg.Forms.ThreadView.Context;
 using Rg.Forms.ThreadView.Helpers;
 using Xamarin.Forms;
@@ -16,6 +17,8 @@ namespace Rg.Forms.ThreadView.Views.Controls
         //TODO: Попробовать найти решение, в котором Entry и Image будут работать без InvokeOnMainThread
         //TODO: Возможно проблема с вылетами (Entry и Image) связанна с быстрой установкой BindingContext, возможно стоит подождать, пока создадутся все рендеры, а потом применять контекст
         //TODO: Возможно не стоит менять биндинг контекст, вызывать анимации и делать SetControl, так как OnContentChanged и так это делает если не менять Packager
+
+        private bool _privateIsCreated;
 
         internal event EventHandler ContentChanged;
         internal object InternalBindingContext;
@@ -33,6 +36,8 @@ namespace Rg.Forms.ThreadView.Views.Controls
         public static readonly BindableProperty TimeOffsetProperty = BindableProperty.Create(nameof(TimeOffset), typeof(int), typeof(ThreadView), 120);
 
         public static readonly BindableProperty InvokeOnMainThreadProperty = BindableProperty.Create(nameof(InvokeOnMainThread), typeof(bool), typeof(ThreadView), false);
+
+        public static readonly BindableProperty CreatedCommandProperty = BindableProperty.Create(nameof(CreatedCommand), typeof(ICommand), typeof(ThreadView));
 
         public bool IsThreadEnabled
         {
@@ -76,10 +81,17 @@ namespace Rg.Forms.ThreadView.Views.Controls
             set { SetValue(InvokeOnMainThreadProperty, value); }
         }
 
+        public ICommand CreatedCommand
+        {
+            get { return (ICommand)GetValue(CreatedCommandProperty); }
+            set { SetValue(CreatedCommandProperty, value); }
+        }
+
         public ThreadView()
         {
             if (Device.OS != TargetPlatform.Android)
             {
+                _privateIsCreated = true;
                 IsCreated = true;
             }
         }
@@ -91,11 +103,11 @@ namespace Rg.Forms.ThreadView.Views.Controls
             {
                 base.OnBindingContextChanged();
             }
-            else if (IsCreated)
+            else if (_privateIsCreated)
             {
                 SetInheritedBindingContext(content, BindingContext);
             }
-            else if (!(BindingContext is DefaultBindingContext) && !IsCreated && BindingContext != null)
+            else if (!(BindingContext is DefaultBindingContext) && !_privateIsCreated && BindingContext != null)
             {
                 InternalBindingContext = BindingContext;
                 BindingContext = new DefaultBindingContext();
@@ -115,9 +127,20 @@ namespace Rg.Forms.ThreadView.Views.Controls
             }
             else
             {
+                element._privateIsCreated = false;
                 element.IsCreated = false;
                 element.ContentChanged?.Invoke(element, EventArgs.Empty);
             }
+        }
+
+        internal async void OnCreated()
+        {
+            _privateIsCreated = true;
+            if (InternalBindingContext != null) BindingContext = InternalBindingContext;
+            await Task.Delay(50);
+
+            IsCreated = true;
+            CreatedCommand?.Execute(null);
         }
 
         internal void PreparingAnimation()

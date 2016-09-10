@@ -95,8 +95,7 @@ namespace Rg.Forms.ThreadView.Droid.Renderers.Controls
         {
             if (Element == null) return;
 
-            Element.IsCreated = true;
-            if (Element.InternalBindingContext != null) Element.BindingContext = Element.InternalBindingContext;
+            Element.OnCreated();
             SetNativeControl(renderer.ViewGroup);
 
             Element.Animate();
