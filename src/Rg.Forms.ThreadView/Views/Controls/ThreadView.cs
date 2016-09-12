@@ -39,6 +39,17 @@ namespace Rg.Forms.ThreadView.Views.Controls
 
         public static readonly BindableProperty CreatedCommandProperty = BindableProperty.Create(nameof(CreatedCommand), typeof(ICommand), typeof(ThreadView));
 
+        public static readonly BindableProperty IsThrowInternalExceptionProperty = BindableProperty.Create(nameof(IsThrowInternalException), typeof(bool), typeof(ThreadView), false);
+
+        /// <summary>
+        /// This is default value for <see cref="T:OnThrowInternalError"/>
+        /// </summary>
+        public bool IsThrowInternalException
+        {
+            get { return (bool)GetValue(IsThrowInternalExceptionProperty); }
+            set { SetValue(IsThrowInternalExceptionProperty, value); }
+        }
+
         /// <summary>
         /// This property enables or disables <see cref="T:ThreadView"/>
         /// </summary>
@@ -173,6 +184,16 @@ namespace Rg.Forms.ThreadView.Views.Controls
         {
             await Task.Delay(300);
             await this.FadeTo(1);
+        }
+
+        /// <summary>
+        /// This method is invoked when error is thrown inside <see cref="T:TemplateUtilities.OnControlTemplateChanged"/>
+        /// </summary>
+        /// <param name="e">This is exception thrown</param>
+        /// <returns>If return value will be true then exception is be thrown</returns>
+        public virtual bool OnThrowInternalException(Exception e)
+        {
+            return IsThrowInternalException;
         }
     }
 }

@@ -10,6 +10,7 @@ using Rg.Forms.ThreadView.Helpers;
 using Rg.Forms.ThreadView.Views.Controls;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
+using Exception = System.Exception;
 using View = Android.Views.View;
 
 [assembly: ExportRenderer(typeof(ThreadView), typeof(ThreadViewRenderer))]
@@ -76,7 +77,19 @@ namespace Rg.Forms.ThreadView.Droid.Renderers.Controls
                 if (Element != null && content == element.Content)
                 {
                     ChangePackagerIfNeed();
-                    ContentHelper.OnContentChanged(Element, null, content);
+
+                    try
+                    {
+                        ContentHelper.OnContentChanged(Element, Element.Content, content);
+                    }
+                    catch (Exception e)
+                    {
+                        var isThrow = Element.OnThrowInternalException(e);
+                        if(isThrow)
+                            throw;
+
+                        return;
+                    }
 
                     BeginInvokeOnMainThreadIfNeed(async () =>
                     {
