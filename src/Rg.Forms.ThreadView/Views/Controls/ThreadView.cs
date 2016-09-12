@@ -39,6 +39,9 @@ namespace Rg.Forms.ThreadView.Views.Controls
 
         public static readonly BindableProperty CreatedCommandProperty = BindableProperty.Create(nameof(CreatedCommand), typeof(ICommand), typeof(ThreadView));
 
+        /// <summary>
+        /// This property enables or disables <see cref="T:ThreadView"/>
+        /// </summary>
         public bool IsThreadEnabled
         {
             get { return (bool)GetValue(IsThreadEnabledProperty); }
@@ -51,36 +54,54 @@ namespace Rg.Forms.ThreadView.Views.Controls
             set { SetValue(ContentProperty, value); }
         }
 
+        /// <summary>
+        /// This property is changed when <see cref="T:Content"/> is created or changed
+        /// </summary>
         public bool IsCreated
         {
             get { return (bool)GetValue(IsCreatedProperty); }
             internal set { SetValue(IsCreatedProperty, value); }
         }
 
+        /// <summary>
+        /// This property is enables or disables animation which is started after <see cref="T:Content"/> was created
+        /// </summary>
         public bool IsAnimated
         {
             get { return (bool) GetValue(IsAnimatedProperty); }
             set { SetValue(IsAnimatedProperty, value); }
         }
 
+        /// <summary>
+        /// This property enables or disables delay before adding created views in <see cref="T:Content"/> 
+        /// </summary>
         public bool IsTimeOffset
         {
             get { return (bool) GetValue(IsTimeOffsetProperty); }
             set { SetValue(IsTimeOffsetProperty, value); }
         }
 
+        /// <summary>
+        /// Delay before adding created views in <see cref="T:Content"/>
+        /// </summary>
         public int TimeOffset
         {
             get { return (int) GetValue(TimeOffsetProperty); }
             set { SetValue(TimeOffsetProperty, value); }
         }
 
+        /// <summary>
+        /// Create <see cref="T:Content"/> in main thread or in second thread
+        /// </summary>
         public bool InvokeOnMainThread
         {
             get { return (bool)GetValue(InvokeOnMainThreadProperty); }
             set { SetValue(InvokeOnMainThreadProperty, value); }
         }
 
+        /// <summary>
+        /// This command is invoked after <see cref="T:Content"/> was created
+        /// </summary>
         public ICommand CreatedCommand
         {
             get { return (ICommand)GetValue(CreatedCommandProperty); }
