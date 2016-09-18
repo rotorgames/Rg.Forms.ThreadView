@@ -36,6 +36,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Context\DefaultBindingContext.cs" />
+    <Compile Include="EventArgs\ThreadViewInternalExceptionArgs.cs" />
     <Compile Include="Helpers\ContentHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Views\Controls\ThreadView.cs" />

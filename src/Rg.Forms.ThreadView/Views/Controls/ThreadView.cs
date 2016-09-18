@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Rg.Forms.ThreadView.Context;
+using Rg.Forms.ThreadView.EventArgs;
 using Rg.Forms.ThreadView.Helpers;
 using Xamarin.Forms;
 
@@ -22,6 +23,8 @@ namespace Rg.Forms.ThreadView.Views.Controls
 
         internal event EventHandler ContentChanged;
         internal object InternalBindingContext;
+
+        public event EventHandler<ThreadViewInternalExceptionArgs> ThrowInternalException;
 
         public static readonly BindableProperty IsThreadEnabledProperty = BindableProperty.Create(nameof(IsThreadEnabled), typeof(bool), typeof(ThreadView), true);
 
@@ -161,7 +164,7 @@ namespace Rg.Forms.ThreadView.Views.Controls
             {
                 element._privateIsCreated = false;
                 element.IsCreated = false;
-                element.ContentChanged?.Invoke(element, EventArgs.Empty);
+                element.ContentChanged?.Invoke(element, System.EventArgs.Empty);
             }
         }
 
@@ -193,6 +196,7 @@ namespace Rg.Forms.ThreadView.Views.Controls
         /// <returns>If return value will be true then exception is be thrown</returns>
         public virtual bool OnThrowInternalException(Exception e)
         {
+            ThrowInternalException?.Invoke(this, new ThreadViewInternalExceptionArgs(e));
             return IsThrowInternalException;
         }
     }

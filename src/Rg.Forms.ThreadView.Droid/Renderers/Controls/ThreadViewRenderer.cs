@@ -49,7 +49,7 @@ namespace Rg.Forms.ThreadView.Droid.Renderers.Controls
             }
         }
 
-        private void OnContentChanged(object sender, EventArgs args)
+        private void OnContentChanged(object sender, System.EventArgs args)
         {
             var element = (Views.Controls.ThreadView) sender;
             CreateRenderer(element);
@@ -59,47 +59,55 @@ namespace Rg.Forms.ThreadView.Droid.Renderers.Controls
         {
             StartTaskIfNeed(async () =>
             {
-                if (element.IsTimeOffset && element.InvokeOnMainThread) await Task.Delay(element.TimeOffset);
-
                 var content = element.Content;
 
-                content.Parent = Element;
+                if (element.IsTimeOffset && element.InvokeOnMainThread) await Task.Delay(element.TimeOffset);
 
-                var renderer = Platform.GetRenderer(element.Content);
+                try
+                {
+                    content.Parent = Element;
+                }
+                catch (Exception e)
+                {
+                    if (CatchInternalError(e))
+                        throw;
+                }
+
+                if(Element?.Content == null)
+                    return;
+
+                var renderer = Platform.GetRenderer(content);
                 if (renderer == null)
                 {
                     renderer = Platform.CreateRenderer(element.Content);
                     Platform.SetRenderer(element.Content, renderer);
                 }
 
-                content.Parent = null;
-
-                if (Element != null && content == element.Content)
+                try
                 {
-                    ChangePackagerIfNeed();
+                    content.Parent = null;
 
-                    try
+                    if (Element != null && content == element.Content)
                     {
+                        ChangePackagerIfNeed();
+
                         ContentHelper.OnContentChanged(Element, Element.Content, content);
-                    }
-                    catch (Exception e)
-                    {
-                        var isThrow = Element.OnThrowInternalException(e);
-                        if(isThrow)
-                            throw;
-
-                        return;
-                    }
-
-                    BeginInvokeOnMainThreadIfNeed(async () =>
-                    {
-                        if (element.IsTimeOffset && !element.InvokeOnMainThread) await Task.Delay(element.TimeOffset);
-
-                        if (Element != null)
+                        
+                        BeginInvokeOnMainThreadIfNeed(async () =>
                         {
-                            SetContent(renderer);
-                        }
-                    });
+                            if (element.IsTimeOffset && !element.InvokeOnMainThread) await Task.Delay(element.TimeOffset);
+                            
+                            if (Element != null)
+                            {
+                                SetContent(renderer);
+                            }
+                        });
+                    }
+                }
+                catch (Exception e)
+                {
+                    if (CatchInternalError(e))
+                        throw;
                 }
             });
         }
@@ -108,10 +116,19 @@ namespace Rg.Forms.ThreadView.Droid.Renderers.Controls
         {
             if (Element == null) return;
 
-            SetNativeControl(renderer.ViewGroup);
-            Element.OnCreated();
+            try
+            {
+                SetNativeControl(renderer.ViewGroup);
+                Element.OnCreated();
 
-            Element.Animate();
+                Element.Animate();
+            }
+            catch (Exception e)
+            {
+                if (CatchInternalError(e))
+                    throw;
+            }
+            
         }
 
         private void ChangePackagerIfNeed()
@@ -153,6 +170,14 @@ namespace Rg.Forms.ThreadView.Droid.Renderers.Controls
             {
                 Device.BeginInvokeOnMainThread(action);
             }
+        }
+
+        private bool CatchInternalError(Exception e)
+        {
+            System.Diagnostics.Debug.WriteLine(e.ToString());
+            var isThrow = Element.OnThrowInternalException(e);
+
+            return isThrow;
         }
     }
 }
