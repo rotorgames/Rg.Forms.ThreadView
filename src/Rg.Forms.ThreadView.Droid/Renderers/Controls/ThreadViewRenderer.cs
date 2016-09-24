@@ -61,10 +61,9 @@ namespace Rg.Forms.ThreadView.Droid.Renderers.Controls
             {
                 var content = element.Content;
 
-                if (element.IsTimeOffset && element.InvokeOnMainThread) await Task.Delay(element.TimeOffset);
-
                 try
                 {
+                    if (element.IsTimeOffset && element.InvokeOnMainThread) await Task.Delay(element.TimeOffset);
                     content.Parent = Element;
                 }
                 catch (Exception e)
