@@ -1,8 +1,5 @@
 using System;
-using System.Diagnostics;
-using System.Reflection;
 using System.Threading.Tasks;
-using Java.Lang;
 using Rg.Forms.ThreadView.Droid.Helpers;
 using Rg.Forms.ThreadView.Droid.Packagers;
 using Rg.Forms.ThreadView.Droid.Renderers.Controls;
@@ -75,6 +72,8 @@ namespace Rg.Forms.ThreadView.Droid.Renderers.Controls
                 if(Element?.Content == null)
                     return;
 
+                content.BatchBegin();
+
                 var renderer = Platform.GetRenderer(content);
                 if (renderer == null)
                 {
@@ -118,6 +117,7 @@ namespace Rg.Forms.ThreadView.Droid.Renderers.Controls
             try
             {
                 SetNativeControl(renderer.ViewGroup);
+                Element.BatchCommit();
                 Element.OnCreated();
 
                 Element.Animate();

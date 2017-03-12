@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Rg.Forms.ThreadView.Context;
@@ -149,6 +146,36 @@ namespace Rg.Forms.ThreadView.Views.Controls
             }
         }
 
+        #region Override Blocked Methods
+
+        protected override void OnChildMeasureInvalidated()
+        {
+            if (IsCreated)
+                base.OnChildMeasureInvalidated();
+        }
+
+        protected override void OnSizeAllocated(double width, double height)
+        {
+            if (IsCreated)
+                base.OnSizeAllocated(width, height);
+        }
+
+        protected override void LayoutChildren(double x, double y, double width, double height)
+        {
+            if (IsCreated)
+                base.LayoutChildren(x, y, width, height);
+        }
+
+        protected override SizeRequest OnMeasure(double widthConstraint, double heightConstraint)
+        {
+            if (IsCreated)
+                return base.OnMeasure(widthConstraint, heightConstraint);
+
+            return new SizeRequest();
+        }
+
+        #endregion
+
         private static void OnContentChange(BindableObject bindable, object oldvalue, object newvalue)
         {
             var element = (ThreadView) bindable;
@@ -176,6 +203,7 @@ namespace Rg.Forms.ThreadView.Views.Controls
 
             IsCreated = true;
             CreatedCommand?.Execute(null);
+            InvalidateLayout();
         }
 
         internal void PreparingAnimation()
@@ -187,6 +215,7 @@ namespace Rg.Forms.ThreadView.Views.Controls
         {
             await Task.Delay(300);
             await this.FadeTo(1);
+            Opacity = 1;
         }
 
         /// <summary>
